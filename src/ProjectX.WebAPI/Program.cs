@@ -20,6 +20,8 @@ builder.Services.AddDbContext<ProjectXDbContext>(options =>
 });
 
 builder.Services.AddTransient<SeedHelper>();
+builder.Services.AddTransient(typeof(IProjectXRepository<,>), typeof(BaseProjectXRepository<,>));
+builder.Services.AddAutoMapper(System.Reflection.Assembly.Load("ProjectX.Core"));
 
 var app = builder.Build();
 

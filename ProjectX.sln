@@ -10,13 +10,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{5B87A3EC-D7F6-46CA-828B-4BDEF8A3FE19}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig.inferred = .editorconfig.inferred
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Data", "src\ProjectX.Data\ProjectX.Data.csproj", "{F47001FE-7063-4DBF-8208-8A7D5FA88DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Data", "src\ProjectX.Data\ProjectX.Data.csproj", "{F47001FE-7063-4DBF-8208-8A7D5FA88DA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Core", "src\ProjectX.Core\ProjectX.Core.csproj", "{391E9A4D-DFA7-4326-9638-793434208D7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Core", "src\ProjectX.Core\ProjectX.Core.csproj", "{391E9A4D-DFA7-4326-9638-793434208D7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.WebAPI", "src\ProjectX.WebAPI\ProjectX.WebAPI.csproj", "{A20945F1-40D3-4025-A82C-2EAE22B5B758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.WebAPI", "src\ProjectX.WebAPI\ProjectX.WebAPI.csproj", "{A20945F1-40D3-4025-A82C-2EAE22B5B758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
