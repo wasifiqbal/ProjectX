@@ -10,6 +10,9 @@ ProjectX is a self-learning project to polish my skills in the latest .Net
 ## Libraries / Tools / Frameworks
 * EntityFramework Core
 * AutoMapper
+* xUnit
+* Moq
+* FluentAssertions
 
 ## Patterns
 * Repository Pattern

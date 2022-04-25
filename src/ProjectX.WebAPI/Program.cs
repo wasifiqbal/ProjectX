@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectX.Data.EFCore;
+using ProjectX.Service.Tenants;
 using ProjectX.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,14 +15,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProjectXDbContext>(options =>
-{ 
-    options.UseSqlServer(configuration.GetConnectionString("Default"),
-            assembly => assembly.MigrationsAssembly(typeof(ProjectXDbContext).Assembly.FullName));
+{
+	options.UseSqlServer(configuration.GetConnectionString("Default"),
+			assembly => assembly.MigrationsAssembly(typeof(ProjectXDbContext).Assembly.FullName));
 });
 
 builder.Services.AddTransient<SeedHelper>();
 builder.Services.AddTransient(typeof(IProjectXRepository<,>), typeof(BaseProjectXRepository<,>));
 builder.Services.AddAutoMapper(System.Reflection.Assembly.Load("ProjectX.Core"));
+builder.Services.AddTransient(typeof(ITenantService), typeof(TenantService));
+
 
 var app = builder.Build();
 
@@ -29,8 +32,8 @@ app.SeedData();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

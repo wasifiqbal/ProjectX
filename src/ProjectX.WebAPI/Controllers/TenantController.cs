@@ -1,66 +1,48 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using ProjectX.Core.Tenants;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjectX.Core.Tenants.DTO;
-using ProjectX.Data.EFCore;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using ProjectX.Service.Tenants;
 
 namespace ProjectX.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TenantController : ControllerBase
-    {
-        private readonly IProjectXRepository<Tenant, int> _repository;
-        private readonly IMapper _mapper;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class TenantController : ControllerBase
+	{
+		private readonly ITenantService _tenantService;
 
-        public TenantController(IProjectXRepository<Tenant, int> repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
-        // GET: api/<ValuesController>
-        [HttpGet]
-        public IEnumerable<TenantDto> Get()
-        {
-            var tenants = _repository.GetAll().ToList();
-            return _mapper.Map<List<TenantDto>>(tenants);
-        }
+		public TenantController(ITenantService tenantService)
+		{
+			_tenantService = tenantService;
+		}
+		[HttpGet]
+		public IEnumerable<TenantDto> Get()
+		{
+			return _tenantService.GetAll();
+		}
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public async Task<TenantDto> Get(int id)
-        {
-            var tenant = await _repository.GetByPrimaryKeyAsync(id);
-            return _mapper.Map<TenantDto>(tenant);
-        }
+		[HttpGet("{id}")]
+		public async Task<TenantDto> Get(int id)
+		{
+			return await _tenantService.GetAsync(id);
+		}
 
-        // POST api/<ValuesController>
-        [HttpPost]
-        public async Task PostAsync([FromBody] CreateTenantDto input)
-        {
-            if (input == null)
-                throw new HttpRequestException("Model is empty");
+		[HttpPost]
+		public async Task PostAsync([FromBody] CreateTenantDto input)
+		{
+			await _tenantService.CreateAsync(input);
+		}
 
-            var tenant = _mapper.Map<Tenant>(input);
-            await _repository.InsertAsync(tenant);
-        }
+		[HttpPut("{id}")]
+		public async Task PutAsync(int id, [FromBody] UpdateTenantDto input)
+		{
+			input.Id = id;
+			await _tenantService.UpdateAsync(input);
+		}
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] UpdateTenantDto input)
-        {
-            var tenant = await _repository.GetByPrimaryKeyAsync(id);
-            _mapper.Map<UpdateTenantDto, Tenant>(input, tenant);
-            await _repository.UpdateAsync(tenant);
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public async Task DeleteAsync(int id)
-        {
-            await _repository.DeleteAsync(id);
-        }
-    }
+		[HttpDelete("{id}")]
+		public async Task DeleteAsync(int id)
+		{
+			await _tenantService.DeleteAsync(id);
+		}
+	}
 }
