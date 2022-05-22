@@ -34,7 +34,6 @@ namespace ProjectX.Service.Tenants
 		{
 			Validator.ValidateObject(input, new ValidationContext(input));
 			var tenant = _mapper.Map<Tenant>(input);
-			Validator.ValidateObject(tenant, new ValidationContext(tenant));
 			var result = await _repository.InsertAsync(tenant);
 			return _mapper.Map<TenantDto>(result);
 		}
@@ -44,7 +43,6 @@ namespace ProjectX.Service.Tenants
 			Validator.ValidateObject(input, new ValidationContext(input));
 			var tenant = await _repository.GetByPrimaryKeyAsync(input.Id);
 			_mapper.Map<UpdateTenantDto, Tenant>(input, tenant);
-			Validator.ValidateObject(tenant, new ValidationContext(tenant));
 			var result = await _repository.UpdateAsync(tenant);
 			return _mapper.Map<TenantDto>(result);
 		}

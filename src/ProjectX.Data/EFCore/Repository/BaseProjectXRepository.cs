@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectX.Data.EFCore
 {
@@ -25,6 +26,8 @@ namespace ProjectX.Data.EFCore
 
 		public async Task<TEntity> InsertAsync(TEntity entity)
 		{
+			Validator.ValidateObject(entity, new ValidationContext(entity));
+
 			await _table.AddAsync(entity);
 			await _context.SaveChangesAsync();
 			return entity;
@@ -32,6 +35,8 @@ namespace ProjectX.Data.EFCore
 
 		public async Task<TEntity> UpdateAsync(TEntity entity)
 		{
+			Validator.ValidateObject(entity, new ValidationContext(entity));
+
 			_table.Attach(entity);
 			_context.Entry(entity).State = EntityState.Modified;
 			await _context.SaveChangesAsync();
