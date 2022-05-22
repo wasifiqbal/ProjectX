@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectX.Core.Tenants;
 using ProjectX.Core.Tenants.DTO;
 using ProjectX.Data.EFCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectX.Service.Tenants
 {
@@ -17,7 +18,7 @@ namespace ProjectX.Service.Tenants
 			_mapper = mapper;
 		}
 
-		public IEnumerable<TenantDto> GetAll()
+		public IList<TenantDto> GetAll()
 		{
 			var tenants = _repository.GetAll().AsNoTracking().ToList();
 			return _mapper.Map<List<TenantDto>>(tenants);
@@ -31,23 +32,29 @@ namespace ProjectX.Service.Tenants
 
 		public async Task<TenantDto> CreateAsync(CreateTenantDto input)
 		{
-			if (input == null)
-				throw new ArgumentNullException(nameof(input));
-
+			Validator.ValidateObject(input, new ValidationContext(input));
 			var tenant = _mapper.Map<Tenant>(input);
+			Validator.ValidateObject(tenant, new ValidationContext(tenant));
 			var result = await _repository.InsertAsync(tenant);
 			return _mapper.Map<TenantDto>(result);
 		}
 
-		public async Task UpdateAsync(UpdateTenantDto input)
+		public async Task<TenantDto> UpdateAsync(UpdateTenantDto input)
 		{
+			Validator.ValidateObject(input, new ValidationContext(input));
 			var tenant = await _repository.GetByPrimaryKeyAsync(input.Id);
 			_mapper.Map<UpdateTenantDto, Tenant>(input, tenant);
-			await _repository.UpdateAsync(tenant);
+			Validator.ValidateObject(tenant, new ValidationContext(tenant));
+			var result = await _repository.UpdateAsync(tenant);
+			return _mapper.Map<TenantDto>(result);
 		}
 
 		public async Task DeleteAsync(int id)
 		{
+			var tenant = await _repository.GetByPrimaryKeyAsync(id);
+			if (tenant == null)
+				throw new NullReferenceException();
+
 			await _repository.DeleteAsync(id);
 		}
 	}
