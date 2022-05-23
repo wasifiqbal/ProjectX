@@ -13,6 +13,8 @@ ProjectX is a self-learning project to polish my skills in the latest .Net
 * xUnit
 * Moq
 * FluentAssertions
+* AspNetCore.HealthChecks
+* AspNetCore.HealthChecks.UI
 
 ## Patterns
 * Repository Pattern

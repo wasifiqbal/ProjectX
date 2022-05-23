@@ -6,7 +6,7 @@ namespace ProjectX.Data.EFCore
 	public class ProjectXDbContext : DbContext
 	{
 		public ProjectXDbContext() { }
-		public ProjectXDbContext(DbContextOptions options) : base(options) { }
+		public ProjectXDbContext(DbContextOptions<ProjectXDbContext> options) : base(options) { }
 
 
 		public DbSet<Tenant> Tenants { get; set; }
