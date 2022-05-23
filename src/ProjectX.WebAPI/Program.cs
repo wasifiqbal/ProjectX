@@ -1,7 +1,10 @@
+using HealthChecks.UI.Client;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProjectX.Data.EFCore;
 using ProjectX.Service.Tenants;
 using ProjectX.WebAPI;
+using ProjectX.WebAPI.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,11 @@ builder.Services.AddDbContext<ProjectXDbContext>(options =>
 	options.UseSqlServer(configuration.GetConnectionString("Default"),
 			assembly => assembly.MigrationsAssembly(typeof(ProjectXDbContext).Assembly.FullName));
 });
+builder.Services.AddHealthChecks()
+	.AddSqlServer(builder.Configuration.GetConnectionString("Default"), name: "ProjectXDB", failureStatus: HealthStatus.Unhealthy,  tags: new[] { "database" })
+	.AddCheck<ProjectXHealthCheck>("Internal", HealthStatus.Degraded, new[] { "Internal" }, new TimeSpan(0, 0, 60));
+
+builder.Services.AddHealthChecksUI().AddSqlServerStorage(builder.Configuration.GetConnectionString("HealthCheck"));
 
 builder.Services.AddTransient<SeedHelper>();
 builder.Services.AddTransient(typeof(IProjectXRepository<,>), typeof(BaseProjectXRepository<,>));
@@ -41,6 +49,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHealthCheckSettings();
 
 app.Run();
 
