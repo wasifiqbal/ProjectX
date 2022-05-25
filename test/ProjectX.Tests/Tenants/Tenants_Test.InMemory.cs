@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using ProjectX.Core.Tenants;
 using ProjectX.Core.Tenants.DTO;
 using ProjectX.Data.EFCore;
@@ -18,10 +19,9 @@ namespace ProjectX.Tests.Tenants
 
 		public Tenants_Test_InMemory()
 		{
-			_repository = new BaseProjectXRepository<Tenant, int>(_context);
-			_tenantService = new TenantService(_repository, _mapper);
+			_repository = new BaseProjectXRepository<Tenant, int>(_context, loggerFactory.CreateLogger<BaseProjectXRepository<Tenant, int>>());
+			_tenantService = new TenantService(_repository, _mapper, loggerFactory.CreateLogger<TenantService>());
 		}
-
 
 		[Fact]
 		public async Task GetAll_Should_Return_ListOfTenantsAsync()

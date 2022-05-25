@@ -9,10 +9,13 @@ namespace ProjectX.WebAPI.Controllers
 	public class TenantController : ControllerBase
 	{
 		private readonly ITenantService _tenantService;
+		private readonly ILogger<TenantController> _logger;
 
-		public TenantController(ITenantService tenantService)
+		public TenantController(ITenantService tenantService,
+			ILogger<TenantController> logger)
 		{
 			_tenantService = tenantService;
+			_logger = logger;
 		}
 		[HttpGet]
 		public IEnumerable<TenantDto> Get()
