@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectX.Data.EFCore
@@ -7,11 +8,14 @@ namespace ProjectX.Data.EFCore
 	{
 		private readonly ProjectXDbContext _context;
 		private readonly DbSet<TEntity> _table;
+		private readonly ILogger<BaseProjectXRepository<TEntity, TPrimaryKey>> _logger;
 
-		public BaseProjectXRepository(ProjectXDbContext context)
+		public BaseProjectXRepository(ProjectXDbContext context,
+			ILogger<BaseProjectXRepository<TEntity, TPrimaryKey>> logger)
 		{
 			_context = context;
 			_table = _context.Set<TEntity>();
+			_logger = logger;
 		}
 
 		public IQueryable<TEntity> GetAll()

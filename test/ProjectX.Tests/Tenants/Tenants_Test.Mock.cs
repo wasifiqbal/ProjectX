@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using ProjectX.Core.Tenants;
 using ProjectX.Core.Tenants.DTO;
@@ -15,12 +16,14 @@ namespace ProjectX.Tests.Tenants
 {
 	public class Tenants_Test_Mock : TestBase
 	{
+		private readonly ILogger<TenantService> _logger;
 		private readonly TenantService _tenantService;
 		private readonly Mock<IProjectXRepository<ProjectX.Core.Tenants.Tenant, int>> _repository = new();
 
 		public Tenants_Test_Mock()
 		{
-			_tenantService = new TenantService(_repository.Object, _mapper);
+			_logger = new Mock<ILogger<TenantService>>().Object;
+			_tenantService = new TenantService(_repository.Object, _mapper, _logger);
 		}
 
 		[Fact]

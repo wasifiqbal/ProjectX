@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProjectX.Core.Tenants;
 using ProjectX.Core.Tenants.DTO;
 using ProjectX.Data.EFCore;
@@ -11,11 +12,14 @@ namespace ProjectX.Service.Tenants
 	{
 		private readonly IProjectXRepository<Tenant, int> _repository;
 		protected readonly IMapper _mapper;
+		private readonly ILogger<TenantService> _logger;
 
-		public TenantService(IProjectXRepository<Tenant, int> repository, IMapper mapper)
+		public TenantService(IProjectXRepository<Tenant, int> repository, IMapper mapper,
+			ILogger<TenantService> logger)
 		{
 			_repository = repository;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		public IList<TenantDto> GetAll()
